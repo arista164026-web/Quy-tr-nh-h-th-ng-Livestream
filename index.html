@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Scenario Walkthrough — Shop X · Váy hoa nhí V1</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-page:        #0f1117;
+    --bg-primary:     #1a1d27;
+    --bg-secondary:   #23273a;
+    --bg-tertiary:    #2c3044;
+
+    --text-primary:   #e8e6f0;
+    --text-secondary: #9b99b0;
+    --text-tertiary:  #5f5e7a;
+
+    --border-light:   rgba(255,255,255,0.07);
+    --border-medium:  rgba(255,255,255,0.13);
+    --border-strong:  rgba(255,255,255,0.22);
+
+    --blue-bg:   #0d2844;
+    --blue-text: #7ec4f8;
+    --blue-bdr:  #1e5a9c;
+
+    --green-bg:  #0c2a1a;
+    --green-text:#5dd68c;
+    --green-bdr: #1a6b3a;
+
+    --amber-bg:  #2a1e06;
+    --amber-text:#f5be4a;
+    --amber-bdr: #7a540f;
+
+    --red-bg:    #2a0d0d;
+    --red-text:  #f77c7c;
+    --red-bdr:   #7a2222;
+
+    --purple-bg:  #1a1640;
+    --purple-text:#b8b0f0;
+    --purple-bdr: #4a44a0;
+
+    --teal-bg:   #082a22;
+    --teal-text: #4ecfb0;
+    --teal-bdr:  #156b52;
+
+    --mono: 'Courier New', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 32px 16px;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .page-header { margin-bottom: 28px; }
+  .page-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+  .page-title {
+    font-size: 22px; font-weight: 600; color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .page-sub { font-size: 13px; color: var(--text-secondary); }
+
+  /* ── Step nav ── */
+  .step-nav {
+    display: flex; align-items: center; gap: 4px;
+    flex-wrap: nowrap; margin-bottom: 24px;
+    overflow-x: auto; padding-bottom: 4px;
+  }
+  .step-dot {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+    border: 1px solid var(--border-medium);
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    transition: all .2s; user-select: none;
+  }
+  .step-dot:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .step-dot.active {
+    background: var(--blue-bg); color: var(--blue-text);
+    border-color: var(--blue-bdr);
+  }
+  .step-dot.done {
+    background: var(--green-bg); color: var(--green-text);
+    border-color: var(--green-bdr); font-size: 13px;
+  }
+  .step-line { flex: 1; height: 1px; background: var(--border-light); min-width: 6px; }
+
+  /* ── Step card ── */
+  .step-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .step-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .step-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 5px; }
+  .step-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .module-tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px;
+    background: var(--bg-tertiary); color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+  }
+  .step-time { font-size: 12px; color: var(--text-tertiary); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 4px;
+  }
+  .badge-success { background: var(--green-bg);  color: var(--green-text);  border: 1px solid var(--green-bdr); }
+  .badge-info    { background: var(--blue-bg);   color: var(--blue-text);   border: 1px solid var(--blue-bdr); }
+  .badge-warn    { background: var(--amber-bg);  color: var(--amber-text);  border: 1px solid var(--amber-bdr); }
+  .badge-danger  { background: var(--red-bg);    color: var(--red-text);    border: 1px solid var(--red-bdr); }
+  .badge-purple  { background: var(--purple-bg); color: var(--purple-text); border: 1px solid var(--purple-bdr); }
+
+  /* ── Data boxes ── */
+  .data-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .data-box {
+    flex: 1; min-width: 130px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: 12px 14px;
+  }
+  .data-lbl { font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px; }
+  .data-val { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .data-sub { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
+
+  /* ── Comment bubble ── */
+  .comment-bubble {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-medium);
+    border-radius: 14px 14px 14px 3px;
+    padding: 12px 16px; display: inline-block;
+    max-width: 420px; margin-bottom: 10px;
+  }
+  .comment-text { font-size: 14px; color: var(--text-primary); line-height: 1.5; }
+  .comment-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 5px; }
+
+  /* ── System log ── */
+  .system-log {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--text-secondary);
+    background: #0a0c12;
+    border: 1px solid var(--border-light);
+    border-left: 3px solid var(--blue-bdr);
+    border-radius: var(--radius-md);
+    padding: 12px 16px; line-height: 1.9;
+    margin-bottom: 12px;
+  }
+  .log-ok   { color: var(--green-text); }
+  .log-warn { color: var(--amber-text); }
+  .log-info { color: var(--blue-text); }
+
+  /* ── Order card ── */
+  .order-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg); padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .order-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+  .order-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .order-lbl { color: var(--text-secondary); }
+  .order-val { font-weight: 600; color: var(--text-primary); }
+
+  /* ── Timeline ── */
+  .timeline { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .tl-row { display: flex; align-items: center; gap: 12px; }
+  .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .tl-dot.done    { background: var(--green-text); }
+  .tl-dot.active  { background: var(--blue-text); }
+  .tl-dot.pending { background: var(--border-medium); }
+  .tl-text { font-size: 13px; color: var(--text-primary); }
+  .tl-text.pending { color: var(--text-tertiary); }
+
+  /* ── Success box ── */
+  .success-box {
+    background: var(--green-bg);
+    border: 1px solid var(--green-bdr);
+    border-radius: var(--radius-md);
+    padding: 12px 16px; margin-top: 12px;
+  }
+  .success-box-title { font-size: 13px; font-weight: 600; color: var(--green-text); margin-bottom: 4px; }
+  .success-box-text  { font-size: 12px; color: var(--green-text); line-height: 1.5; opacity: .85; }
+
+  /* ── Nav buttons ── */
+  .nav-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 4px;
+  }
+  .nav-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-medium);
+    color: var(--text-primary);
+    padding: 9px 20px; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .nav-btn:hover:not(:disabled) {
+    background: var(--bg-tertiary); border-color: var(--border-strong);
+  }
+  .nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .nav-info { font-size: 12px; color: var(--text-tertiary); text-align: center; }
+
+  /* ── Section label ── */
+  .sec-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+
+  /* ── Prose description ── */
+  .prose-box {
+    border-top: 1px solid var(--border-light);
+    margin-top: 18px; padding-top: 16px;
+  }
+  .prose-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--text-tertiary);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .prose-label::after {
+    content:''; flex:1; height:1px; background: var(--border-light);
+  }
+  .prose-text {
+    font-size: 13.5px; color: var(--text-secondary);
+    line-height: 1.8; font-weight: 400;
+  }
+  .prose-text em { color: var(--text-primary); font-style: italic; }
+  .prose-text strong { color: var(--text-primary); font-weight: 600; }
+  .prose-text .hi-blue   { color: var(--blue-text); font-weight: 500; }
+  .prose-text .hi-green  { color: var(--green-text); font-weight: 500; }
+  .prose-text .hi-amber  { color: var(--amber-text); font-weight: 500; }
+  .prose-text .hi-purple { color: var(--purple-text); font-weight: 500; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <div class="page-eyebrow">Scenario Walkthrough — Hệ thống quản lý đơn hàng Livestream</div>
+    <div class="page-title">Shop X · Váy hoa nhí V1</div>
+    <div class="page-sub">Phiên livestream 20:05 · TikTok Live · 1,240 viewers · Hành trình từ comment → delivered</div>
+  </div>
+
+  <div class="step-nav" id="stepNav"></div>
+  <div id="stepContent"></div>
+  <div class="nav-row">
+    <button class="nav-btn" id="btnPrev" onclick="prevStep()">← Quay lại</button>
+    <span class="nav-info" id="navInfo"></span>
+    <button class="nav-btn" id="btnNext" onclick="nextStep()">Tiếp theo →</button>
+  </div>
+
+</div>
+
+<script>
+const STEPS = [
+  {
+    label: "Comment",
+    numBg: "#1a1640", numColor: "#b8b0f0",
+    time: "20:05:32", module: "Interaction Processing",
+    badge: '<span class="badge badge-purple">Khởi đầu</span>',
+    title: "Khách hàng comment đặt hàng",
+    html: `
+      <div style="margin-bottom:14px">
+        <div class="sec-lbl">Comment trên TikTok Live</div>
+        <div class="comment-bubble">
+          <p class="comment-text">"Cho mình chốt váy hoa nhí size M màu hồng nhé shop ơi 🌸"</p>
+          <p class="comment-meta">@nguyen_thu_ha · 20:05:32</p>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">UID khách</div><div class="data-val">@nguyen_thu_ha</div><div class="data-sub">Khách cũ · 3 đơn trước</div></div>
+        <div class="data-box"><div class="data-lbl">Nền tảng</div><div class="data-val">TikTok Live</div><div class="data-sub">Comment #2,847</div></div>
+        <div class="data-box"><div class="data-lbl">Thời gian</div><div class="data-val">20:05:32</div><div class="data-sub">Phút thứ 5 phiên live</div></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Shop X đang thực hiện phiên livestream trên TikTok với <strong>1.240 người xem</strong>. Vào lúc 20:05:32, khách hàng <span class="hi-purple">@nguyen_thu_ha</span> — một khách cũ đã có 3 đơn hàng trước đó — gõ vào khung chat: <em>"Cho mình chốt váy hoa nhí size M màu hồng nhé shop ơi 🌸"</em>. Đây là comment thứ 2.847 trong phiên. Ngay khi comment xuất hiện, hệ thống <span class="hi-blue">Interaction Processing Module</span> tự động tiếp nhận luồng dữ liệu từ TikTok Live API mà không cần bất kỳ can thiệp thủ công nào từ nhân viên.</p>
+      </div>`
+  },
+  {
+    label: "Parse",
+    numBg: "#1a1640", numColor: "#b8b0f0",
+    time: "20:05:32 +13ms", module: "Interaction Processing",
+    badge: '<span class="badge badge-info">Xử lý tự động</span>',
+    title: "Hệ thống phân tích & phân loại comment",
+    html: `
+      <div class="system-log">
+        <div><span class="log-info">[20:05:32.104]</span> Raw comment received → Comment Parser</div>
+        <div><span class="log-info">[20:05:32.107]</span> Keyword detected: <span class="log-ok">"chốt"</span> → intent = ORDER</div>
+        <div><span class="log-info">[20:05:32.109]</span> Product extracted: <span class="log-ok">"váy hoa nhí"</span> → SKU lookup...</div>
+        <div><span class="log-info">[20:05:32.111]</span> Variant: size=<span class="log-ok">M</span>  color=<span class="log-ok">hồng</span>  → V1-PINK-M</div>
+        <div><span class="log-info">[20:05:32.113]</span> Customer UID: @nguyen_thu_ha → <span class="log-ok">VERIFIED</span> (returning, 3 orders)</div>
+        <div><span class="log-ok">[20:05:32.115]</span> Intent confidence: 97.4% → PROCEED TO ORDER</div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Keyword trigger</div><div class="data-val">"chốt"</div><div class="data-sub">Độ tin cậy 97.4%</div></div>
+        <div class="data-box"><div class="data-lbl">SKU match</div><div class="data-val">V1-PINK-M</div><div class="data-sub">Váy hoa nhí hồng M</div></div>
+        <div class="data-box"><div class="data-lbl">Thời gian xử lý</div><div class="data-val">13ms</div><div class="data-sub">Realtime NLP parse</div></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Chỉ <strong>13 mili-giây</strong> sau khi comment được gửi, hệ thống hoàn tất toàn bộ quá trình phân tích ngôn ngữ. <span class="hi-blue">Comment Parser</span> nhận diện từ khóa kích hoạt <em>"chốt"</em> với độ tin cậy <span class="hi-green">97,4%</span> và phân loại ý định là ORDER. <span class="hi-blue">Keyword Detector</span> trích xuất tên sản phẩm "váy hoa nhí", kích thước M và màu hồng, từ đó tra cứu và xác định đúng mã SKU là <strong>V1-PINK-M</strong>. Đồng thời, hệ thống xác minh <span class="hi-purple">@nguyen_thu_ha</span> là khách hàng đã có hồ sơ với 3 đơn hàng trước — đủ điều kiện để tiến hành tạo đơn tự động mà không cần hỏi lại.</p>
+      </div>`
+  },
+  {
+    label: "Kho",
+    numBg: "#082a22", numColor: "#4ecfb0",
+    time: "20:05:32 +16ms", module: "Inventory Sync",
+    badge: '<span class="badge badge-info">Kiểm tồn kho</span>',
+    title: "Kiểm tra & khóa tồn kho realtime",
+    html: `
+      <div class="system-log">
+        <div><span class="log-info">[20:05:32.116]</span> Stock check: SKU = V1-PINK-M</div>
+        <div><span class="log-ok">[20:05:32.118]</span> Available: 47 units → SUFFICIENT</div>
+        <div><span class="log-ok">[20:05:32.119]</span> Soft-lock 1 unit for order #ORD-20240506-0142</div>
+        <div><span class="log-info">[20:05:32.120]</span> Remaining after lock: 46 units</div>
+        <div><span class="log-ok">[20:05:32.121]</span> Sync → TikTok Shop ✓  Website ✓  Updated</div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Tồn kho trước</div><div class="data-val">47 units</div><div class="data-sub">V1-PINK-M</div></div>
+        <div class="data-box"><div class="data-lbl">Soft-lock</div><div class="data-val">1 unit</div><div class="data-sub">Giữ chỗ 10 phút</div></div>
+        <div class="data-box"><div class="data-lbl">Còn lại</div><div class="data-val">46 units</div><div class="data-sub">Đã sync đa nền tảng</div></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Song song với quá trình phân tích comment, <span class="hi-blue">Inventory Sync Module</span> thực hiện kiểm tra tồn kho theo thời gian thực. Hệ thống xác nhận SKU <strong>V1-PINK-M</strong> còn <span class="hi-green">47 đơn vị</span> — đủ hàng để thực hiện đơn. Ngay lập tức, 1 đơn vị được đặt vào trạng thái <span class="hi-amber">soft-lock</span>, tức là giữ chỗ tạm thời trong <strong>10 phút</strong> cho đơn hàng này, đưa số tồn kho khả dụng xuống còn 46. Trạng thái tồn kho mới được đồng bộ ngay sang TikTok Shop và website, đảm bảo không có nền tảng nào hiển thị số lượng sai hay bán vượt hàng.</p>
+      </div>`
+  },
+  {
+    label: "Đơn hàng",
+    numBg: "#0d2844", numColor: "#7ec4f8",
+    time: "20:05:33", module: "Order Management",
+    badge: '<span class="badge badge-success">Tạo đơn tự động</span>',
+    title: "Hệ thống tạo đơn hàng & thông báo khách",
+    html: `
+      <div class="order-card">
+        <div class="order-row"><span class="order-lbl">Mã đơn</span><span class="order-val" style="font-family:var(--mono);font-size:12px;color:#7ec4f8">ORD-20240506-0142</span></div>
+        <div class="order-row"><span class="order-lbl">Sản phẩm</span><span class="order-val">Váy hoa nhí V1 — Hồng M</span></div>
+        <div class="order-row"><span class="order-lbl">Khách hàng</span><span class="order-val">@nguyen_thu_ha</span></div>
+        <div class="order-row"><span class="order-lbl">Nguồn</span><span class="order-val">TikTok Live · Comment #2847</span></div>
+        <div class="order-row"><span class="order-lbl">Đơn giá</span><span class="order-val" style="color:#5dd68c">189,000 ₫</span></div>
+        <div class="order-row"><span class="order-lbl">Trạng thái</span><span class="badge badge-warn">Chờ xác nhận</span></div>
+        <div class="order-row"><span class="order-lbl">Tạo lúc</span><span class="order-val">20:05:33</span></div>
+      </div>
+      <div style="background:#0a0c12;border:1px solid #1e3a5a;border-radius:8px;padding:10px 14px;font-size:12px;color:#9b99b0">
+        Auto-reply comment: <em style="color:#e8e6f0">"Shop đã nhận đơn! Vui lòng kiểm tra DM để xác nhận địa chỉ nhé 💌"</em>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Chỉ <strong>1 giây</strong> sau khi comment được gửi, <span class="hi-blue">Order Management Module</span> tạo thành công đơn hàng mã <span class="hi-blue">ORD-20240506-0142</span> với đầy đủ thông tin: sản phẩm Váy hoa nhí V1 màu hồng size M, giá <span class="hi-green">189.000 ₫</span>, nguồn từ TikTok Live comment #2.847, trạng thái <span class="hi-amber">Chờ xác nhận</span>. Đồng thời, hệ thống tự động reply ngay vào comment của khách mà không cần nhân viên gõ tay — giúp khách biết đơn đã được ghi nhận và hướng dẫn bước tiếp theo qua DM.</p>
+      </div>`
+  },
+  {
+    label: "KH xác nhận",
+    numBg: "#2a1e06", numColor: "#f5be4a",
+    time: "20:06:10", module: "Customer Management",
+    badge: '<span class="badge badge-warn">Chờ phản hồi</span>',
+    title: "Khách xác nhận thông tin qua DM",
+    html: `
+      <div style="margin-bottom:14px">
+        <div class="sec-lbl">Khách phản hồi qua TikTok DM</div>
+        <div class="comment-bubble">
+          <p class="comment-text">"Địa chỉ: 12 Nguyễn Huệ, P.Bến Nghé, Q.1, HCM. SĐT: 0901234567. Thanh toán COD nhé shop!"</p>
+          <p class="comment-meta">@nguyen_thu_ha · 20:06:10</p>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Hồ sơ KH</div><div class="data-val">Cập nhật</div><div class="data-sub">Địa chỉ + SĐT mới</div></div>
+        <div class="data-box"><div class="data-lbl">Loyalty</div><div class="data-val" style="color:#f5be4a">+10 điểm</div><div class="data-sub">Đơn thứ 4 → Silver</div></div>
+        <div class="data-box"><div class="data-lbl">Thanh toán</div><div class="data-val">COD</div><div class="data-sub">Ưa thích của KH</div></div>
+      </div>
+      <div class="system-log">
+        <div><span class="log-ok">[20:06:12]</span> Order ORD-20240506-0142 → status: <span class="log-ok">CONFIRMED</span></div>
+        <div><span class="log-ok">[20:06:12]</span> Customer profile updated · Loyalty tier: <span class="log-ok">Silver</span></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text"><strong>38 giây</strong> sau khi nhận được thông báo tự động, <span class="hi-purple">@nguyen_thu_ha</span> phản hồi qua DM với địa chỉ giao hàng tại Q.1, TP.HCM và số điện thoại liên hệ, đồng thời chọn hình thức thanh toán <strong>COD</strong>. <span class="hi-blue">Customer Management Module</span> cập nhật hồ sơ khách hàng với địa chỉ và số điện thoại mới, cộng <span class="hi-amber">10 điểm loyalty</span> cho hành động xác nhận đơn. Đây là đơn thứ 4 nên khách được nâng lên hạng <span class="hi-amber">Silver</span>. Trạng thái đơn hàng chuyển sang <span class="hi-green">CONFIRMED</span> lúc 20:06:12.</p>
+      </div>`
+  },
+  {
+    label: "Xuất kho",
+    numBg: "#082a22", numColor: "#4ecfb0",
+    time: "T+1 · 14:00", module: "Inventory Sync",
+    badge: '<span class="badge badge-success">Xuất kho</span>',
+    title: "Xác nhận xuất kho & chuẩn bị đóng gói",
+    html: `
+      <div class="system-log">
+        <div><span class="log-ok">[T+1 · 14:00]</span> Soft-lock → HARD DEDUCT: -1 unit V1-PINK-M</div>
+        <div><span class="log-ok">[14:00]</span> Stock 46 → synced: TikTok Shop ✓  Website ✓</div>
+        <div><span class="log-info">[14:01]</span> Packing slip generated → Warehouse queue</div>
+        <div><span class="log-info">[14:01]</span> Fulfillment: Kho HCM · Carrier: GHTK</div>
+        <div><span class="log-warn">[14:01]</span> LOW STOCK ALERT: V1-PINK-S → only 3 units left!</div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Xuất kho</div><div class="data-val">1 unit</div><div class="data-sub">V1-PINK-M confirmed</div></div>
+        <div class="data-box"><div class="data-lbl">Kho xử lý</div><div class="data-val">HCM</div><div class="data-sub">Đóng gói xong 15:30</div></div>
+        <div class="data-box"><div class="data-lbl" style="color:#f5be4a">Cảnh báo</div><div class="data-val" style="color:#f5be4a">Size S hồng</div><div class="data-sub">Còn 3 — sắp hết</div></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Vào đầu giờ chiều ngày hôm sau, kho HCM xử lý đơn. <span class="hi-amber">Soft-lock</span> được chuyển thành <strong>hard deduct</strong> — trừ thật 1 đơn vị khỏi tồn kho thực tế. Phiếu đóng gói được tạo tự động và đẩy vào hàng chờ của kho. Toàn bộ nền tảng được đồng bộ lần cuối. Đáng chú ý, hệ thống phát <span class="hi-amber">cảnh báo low stock</span> cho SKU V1-PINK-S chỉ còn 3 đơn vị — giúp host livestream có thể thông báo kịp thời cho khách trong phiên tiếp theo, tránh nhận đơn vượt hàng.</p>
+      </div>`
+  },
+  {
+    label: "Giao hàng",
+    numBg: "#0c2a1a", numColor: "#5dd68c",
+    time: "T+1 · 16:30", module: "Order Management",
+    badge: '<span class="badge badge-info">Đang vận chuyển</span>',
+    title: "Bàn giao vận chuyển & theo dõi realtime",
+    html: `
+      <div style="margin-bottom:16px">
+        <div class="sec-lbl">Hành trình đơn hàng</div>
+        <div class="timeline">
+          <div class="tl-row"><div class="tl-dot done"></div><span class="tl-text">20:06 · Đơn xác nhận — Shop X nhận đơn</span></div>
+          <div class="tl-row"><div class="tl-dot done"></div><span class="tl-text">14:00 ngày T+1 · Đóng gói & bàn giao GHTK</span></div>
+          <div class="tl-row"><div class="tl-dot active"></div><span class="tl-text" style="color:#7ec4f8">16:30 ngày T+1 · Đang vận chuyển · Mã GHTK-8821047</span></div>
+          <div class="tl-row"><div class="tl-dot pending"></div><span class="tl-text pending">Dự kiến T+2 sáng · Giao đến khách tại Q.1, HCM</span></div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Đơn vị giao</div><div class="data-val">GHTK</div><div class="data-sub">Mã GHTK-8821047</div></div>
+        <div class="data-box"><div class="data-lbl">Dự kiến</div><div class="data-val">T+2 sáng</div><div class="data-sub">Nội thành HCM</div></div>
+        <div class="data-box"><div class="data-lbl">Thanh toán</div><div class="data-val">COD</div><div class="data-sub">Thu 189,000 ₫ khi giao</div></div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Đơn hàng được bàn giao cho <strong>GHTK</strong> lúc 16:30 với mã vận đơn <span class="hi-blue">GHTK-8821047</span>. Hệ thống theo dõi hành trình theo thời gian thực: từ lúc xác nhận đơn lúc 20:06 tối hôm trước, đóng gói 14:00, lấy hàng 16:30, dự kiến giao đến tay khách tại nội thành TP.HCM vào sáng T+2. Khách hàng <span class="hi-purple">@nguyen_thu_ha</span> sẽ thanh toán <span class="hi-green">189.000 ₫</span> trực tiếp cho shipper khi nhận hàng theo hình thức COD đã chọn.</p>
+      </div>`
+  },
+  {
+    label: "Delivered",
+    numBg: "#0c2a1a", numColor: "#5dd68c",
+    time: "T+2 · 10:42", module: "Analytics",
+    badge: '<span class="badge badge-success">Hoàn tất</span>',
+    title: "Giao hàng thành công & cập nhật Analytics",
+    html: `
+      <div class="system-log">
+        <div><span class="log-ok">[T+2 · 10:42]</span> Order ORD-20240506-0142 → status: <span class="log-ok">DELIVERED ✓</span></div>
+        <div><span class="log-ok">[10:42]</span> COD collected: 189,000 ₫ · reconciled</div>
+        <div><span class="log-ok">[10:42]</span> Customer loyalty: +50 pts · Total 210 pts · <span class="log-ok">Silver maintained</span></div>
+        <div><span class="log-info">[10:42]</span> Analytics updated: session conversion +1 · stats refreshed</div>
+        <div><span class="log-info">[10:43]</span> Auto SMS sent: "Đơn hàng đã giao thành công! Cảm ơn bạn 💐 — Shop X"</div>
+      </div>
+      <div class="data-row">
+        <div class="data-box"><div class="data-lbl">Comment → Đơn tạo</div><div class="data-val" style="color:#5dd68c">0.8 giây</div><div class="data-sub">Xử lý hoàn toàn tự động</div></div>
+        <div class="data-box"><div class="data-lbl">Tổng thời gian</div><div class="data-val">~46 giờ</div><div class="data-sub">Comment → Delivered</div></div>
+        <div class="data-box"><div class="data-lbl">Doanh thu</div><div class="data-val" style="color:#5dd68c">189,000 ₫</div><div class="data-sub">Đã thu COD thành công</div></div>
+      </div>
+      <div class="success-box">
+        <div class="success-box-title">Đơn hàng hoàn thành xuất sắc</div>
+        <div class="success-box-text">@nguyen_thu_ha nâng hạng lên Silver · Xác suất mua lại phiên tới: 74% · Đóng góp vào conversion rate phiên: 34.2%</div>
+      </div>
+      <div class="prose-box">
+        <div class="prose-label">Mô tả</div>
+        <p class="prose-text">Lúc 10:42 ngày T+2, shipper xác nhận giao hàng thành công. <span class="hi-blue">Analytics Module</span> tự động thực hiện đồng thời nhiều tác vụ: đối soát COD <span class="hi-green">189.000 ₫</span>, cộng <span class="hi-amber">50 điểm loyalty</span> cho <span class="hi-purple">@nguyen_thu_ha</span> (tổng 210 điểm, duy trì hạng Silver), cập nhật số liệu conversion rate của phiên livestream, và gửi SMS chăm sóc khách hàng tự động. Toàn bộ hành trình từ <strong>comment đến delivered</strong> mất khoảng <strong>~46 giờ</strong> — trong đó giai đoạn quan trọng nhất từ comment đến tạo đơn chỉ tốn <span class="hi-green">0,8 giây</span>, hoàn toàn tự động không cần nhân viên can thiệp. Khách hàng có xác suất <strong>74%</strong> quay lại mua trong phiên livestream tiếp theo của Shop X.</p>
+      </div>`
+  }
+];
+
+let current = 0;
+
+function renderNav() {
+  const nav = document.getElementById('stepNav');
+  nav.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    if (i > 0) {
+      const ln = document.createElement('div');
+      ln.className = 'step-line';
+      nav.appendChild(ln);
+    }
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i === current ? ' active' : i < current ? ' done' : '');
+    dot.textContent = i < current ? '✓' : (i + 1);
+    dot.title = s.label;
+    dot.onclick = (idx => () => { current = idx; render(); })(i);
+    nav.appendChild(dot);
+  });
+}
+
+function renderContent() {
+  const s = STEPS[current];
+  document.getElementById('stepContent').innerHTML = `
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num" style="background:${s.numBg};color:${s.numColor}">${current + 1}</div>
+        <div style="flex:1">
+          <div class="step-title">${s.title}</div>
+          <div class="step-meta" style="margin-top:6px">
+            <span class="module-tag">${s.module}</span>
+            <span class="step-time">${s.time}</span>
+            ${s.badge}
+          </div>
+        </div>
+      </div>
+      ${s.html}
+    </div>`;
+}
+
+function renderButtons() {
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === STEPS.length - 1;
+  document.getElementById('navInfo').textContent =
+    `Bước ${current + 1} / ${STEPS.length} — ${STEPS[current].label}`;
+}
+
+function render() { renderNav(); renderContent(); renderButtons(); }
+function nextStep() { if (current < STEPS.length - 1) { current++; render(); } }
+function prevStep() { if (current > 0) { current--; render(); } }
+
+render();
+</script>
+</body>
+</html>
