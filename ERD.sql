@@ -1,4 +1,7 @@
-﻿Create Database HTLivestream
+### Sơ đồ cấu trúc cơ sở dữ liệu (Diagram)
+![Mô tả sơ đồ](ERD_Live.png)
+
+Create Database HTLivestream
 Go
 use HTLivestream
 Go
